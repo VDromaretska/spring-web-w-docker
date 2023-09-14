@@ -30,7 +30,24 @@ public class Database {
         ResultSet resultSet = statement.executeQuery("SELECT * FROM hiscores order by score desc limit 1000");
         return makeHighScoresFromResultSet(resultSet);
     }
+    public ArrayList<DBWords> getWords() throws SQLException {
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM words limit 1000");
+        return makeWordsFromResultSet(resultSet);
+    }
 
+
+    private static ArrayList<DBWords> makeWordsFromResultSet(ResultSet resultSet) throws SQLException {
+        ArrayList<DBWords> words = new ArrayList<>();
+        while (resultSet.next()) {
+            int id = resultSet.getInt("id");
+            int category_id = resultSet.getInt("category_id");
+            String word = resultSet.getString("word");
+
+            words.add(new DBWords(id, category_id, word));
+        }
+        return words;
+    }
 
     private static ArrayList<HighScore> makeHighScoresFromResultSet(ResultSet resultSet) throws SQLException {
         ArrayList<HighScore> scores = new ArrayList<>();
